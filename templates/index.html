@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>
+			Hybrid Images
+		</title>
+		<style type="text/css">
+			section, img{
+				margin: 10px;
+			}
+			img{
+				width: 200px;
+				height: 200px;
+			}
+		</style>
+	</head>
+	
+	<body>
+		<img src = {{ args.image1 }} id="img1">
+		<img src = {{ args.image2 }} id="img2">
+		<img src = {{ args.hybrid }} id="hybrid">
+
+		<form>
+			<section>
+				<label>Select first image</label>	
+				<input id="input1" type="text" value="https://cdn.pixabay.com/photo/2017/02/20/18/03/cat-2083492__340.jpg">
+				<input id="button1" type="button" value="Submit">
+			</section>
+
+			<section>
+				<label>Select second image</label>	
+				<input id="input2" type="text" value="https://cdn.pixabay.com/photo/2014/04/13/20/49/cat-323262__340.jpg">
+				<input id="button2" type="button" value="Submit">
+			</section>		
+		</form>
+		<span>
+			<button id="button3">Find Hybrid</button>
+			You are viewing test_set = <span id="test">{{ current_set }}</span>
+		</span>
+	</body>
+
+	<script type="text/javascript">
+
+		let input1 = document.querySelector('#input1');
+		let button1 = document.querySelector('#button1');
+		let img1 = document.querySelector('#img1');
+		console.log(img1.src);
+
+		let input2 = document.querySelector('#input2');
+		let button2 = document.querySelector('#button2');
+		let img2 = document.querySelector('#img2');
+
+		let button3 = document.querySelector('#button3'); 
+		let hybrid = document.querySelector('#hybrid');
+
+		button3.addEventListener('click', function(){
+			var req = new XMLHttpRequest();		    
+	    	req.open('POST', '/', true);
+		    req.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
+		    req.send("name1=" + input1.value + "&name2=" + input2.value);
+		    req.onload = function(){
+		    	var res = JSON.parse(req.response);
+		    	img1.src = res.image1;
+		    	img2.src = res.image2;
+		    	hybrid.src = res.hybrid;		    	
+		    	var test = document.querySelector('#test');
+		    	test.innerHTML = res.current_set;
+		    }
+		});
+
+		button1.onclick = function(){
+			img1.src = input1.value;
+		}
+		button2.onclick = function(){
+			img2.src = input2.value;
+		}
+	</script>
+
+</html>
